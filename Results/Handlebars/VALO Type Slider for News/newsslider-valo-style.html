@@ -227,11 +227,22 @@
 							<span class="teaser">\{{slot item @root.slots.Summary}}</span>
 							
 							<span class="details-1">
-								\{{#if (slot item @root.slots.Site)}}<span class="site"><strong>\{{slot item @root.slots.Site}}</strong></span> \{{/if}}
-								<span class="divider">|</span>
+								\{{#if (slot item @root.slots.Site)}}<span class="site"><strong>\{{slot item @root.slots.Site}}</strong></span>
+                                <span class="divider">|</span> \{{/if}}
+								
 								<span class="date">\{{getDate (slot item @root.slots.Date) "LL" 0}}</span>	
 								<span class="divider">|</span>
-								<span class="author">\{{slot item @root.slots.Author}} </span>
+								<span class="author"> <!-- If an OWSUSER Property is used then split at | and take 2nd from array, 
+                                    if there are more Authors like in DisplayAuthor take the first one, else just display Authorvalue -->
+                                    \{{#contains (slot item @root.slots.Author) ';'}}
+                                    \{{first (split (slot item @root.slots.Author) ";")}} 
+                                    \{{else}}
+                                    \{{#contains (slot item @root.slots.Author) '|'}}
+                                    \{{itemAt (split (slot item @root.slots.Author) "|") 1}} 
+                                    \{{else}}
+                                    \{{slot item @root.slots.Author}} 
+                                    \{{/contains}}
+                                    \{{/contains}} </span>
 							</span>
 							<span class="details-2">
 								<span class="counts">
